@@ -22,7 +22,10 @@ export const recordView = (productId) => () => {
 export const fetchRecentlyViewed = () => async (dispatch) => {
   dispatch({ type: FETCH_RECENTLY_VIEWED });
   try {
-    const response = await axios.get('customer/recently-viewed', { headers: { 'X-Session-Id': getSessionId() } });
+    const response = await axios.get('customer/recently-viewed', {
+      params: { store: 'DEFAULT', lang: 'en' },
+      headers: { 'X-Session-Id': getSessionId() }
+    });
     dispatch({ type: SET_RECENTLY_VIEWED, payload: response.data });
   } catch (e) {
     dispatch({ type: SET_RECENTLY_VIEWED, payload: [] });
