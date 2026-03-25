@@ -6,7 +6,8 @@ import { useToasts } from "react-toast-notifications";
 // import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
 import { setProductID } from "../../redux/actions/productActions";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
+import { recordView } from "../../redux/actions/recentlyViewedActions";
 import StarRatings from 'react-star-ratings';
 const ProductGridListSingle = ({
   product,
@@ -26,6 +27,7 @@ const ProductGridListSingle = ({
 }) => {
   const [modalShow, setModalShow] = useState(false);
   const { addToast } = useToasts();
+  const dispatch = useDispatch();
 
   // const discountedPrice = getDiscountPrice(product.price, product.discount);
   const finalProductPrice = product.originalPrice;
@@ -83,7 +85,7 @@ const ProductGridListSingle = ({
 
               </div>
               <div className="pro-same-action pro-quickview">
-                <button onClick={() => setModalShow(true)} title="Quick View">
+                <button onClick={() => { setModalShow(true); dispatch(recordView(product.id)); }} title="Quick View">
                   <i className="pe-7s-look" />
                 </button>
               </div>
