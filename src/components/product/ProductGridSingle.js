@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 // import { getDiscountPrice } from "../../helpers/product";
 import ProductModal from "./ProductModal";
 import { setProductID } from "../../redux/actions/productActions";
+import { recordView } from "../../redux/actions/recentlyViewedActions";
 const ProductGridSingleTwo = ({
   product,
   // currency,
@@ -25,6 +26,7 @@ const ProductGridSingleTwo = ({
 }) => {
   const [modalShow, setModalShow] = useState(false);
   const { addToast } = useToasts();
+  const dispatch = require('react-redux').useDispatch();
 
   // const discountedPrice = getDiscountPrice(product.price, product.discount);
   const finalProductPrice = product.originalPrice;
@@ -96,7 +98,7 @@ const ProductGridSingleTwo = ({
                       </button>
                     )} */}
 
-              <button onClick={() => setModalShow(true)} title="Quick View">
+              <button onClick={() => { setModalShow(true); dispatch(recordView(product.id)); }} title="Quick View">
                 <i className="fa fa-eye"></i>
               </button>
 
