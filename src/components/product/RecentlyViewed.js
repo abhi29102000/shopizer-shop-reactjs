@@ -13,8 +13,6 @@ const RecentlyViewed = () => {
     dispatch(fetchRecentlyViewed());
   }, [dispatch]);
 
-  console.log('[RecentlyViewed] items:', items, 'loading:', loading);
-
   if (loading || !items || items.length === 0) return null;
 
   return (
