@@ -16,7 +16,8 @@ const getSessionId = () => {
 };
 
 const getHeaders = () => {
-  const token = getLocalData('token');
+  const token = localStorage.getItem('token');
+  console.log('[RecentlyViewed] token in localStorage:', token ? token.substring(0, 30) + '...' : 'NULL');
   return {
     'X-Session-Id': getSessionId(),
     ...(token ? { 'Authorization': 'Bearer ' + token } : {})
