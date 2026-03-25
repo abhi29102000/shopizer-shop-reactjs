@@ -12,7 +12,11 @@ import WebService from '../../util/webService';
 import constant from '../../util/constant';
 import { setLoader } from "../../redux/actions/loaderActions";
 import { multilanguage } from "redux-multilanguage";
+import { useDispatch } from "react-redux";
+import { recordView } from "../../redux/actions/recentlyViewedActions";
+import RecentlyViewed from "../../components/product/RecentlyViewed";
 const ProductDetails = ({ strings, location, productID, currentLanguageCode, setLoader, defaultStore }) => {
+  const dispatch = useDispatch();
   const { pathname } = location;
   const [productDetails, setProductDetails] = useState();
   const [productReview, setProductReview] = useState([]);
@@ -20,6 +24,7 @@ const ProductDetails = ({ strings, location, productID, currentLanguageCode, set
   useEffect(() => {
     getProductDetails();
     getReview();
+    if (productID) dispatch(recordView(productID));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,6 +95,9 @@ const ProductDetails = ({ strings, location, productID, currentLanguageCode, set
             review={productReview}
           />
         }
+
+        {/* recently viewed */}
+        <RecentlyViewed />
 
         {/* related product slider */}
         {/* <RelatedProductSlider

@@ -8,6 +8,7 @@ import Promo from "../../wrappers/promos/Promos";
 import Newsletter from "../../wrappers/newsletter/Newsletter";
 import { multilanguage } from "redux-multilanguage";
 import { connect } from "react-redux";
+import RecentlyViewed from "../../components/product/RecentlyViewed";
 const Home = ({ merchant, strings }) => {
   return (
     <Fragment>
@@ -49,6 +50,9 @@ const Home = ({ merchant, strings }) => {
           spaceBottomClass="pb-40"
         />
         */}
+        {/* recently viewed */}
+        <RecentlyViewed />
+
         {/* newsletter */}
         <Newsletter
           spaceTopClass="pt-100"
