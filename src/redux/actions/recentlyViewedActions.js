@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getLocalData } from '../../util/helper';
 
 export const FETCH_RECENTLY_VIEWED = 'FETCH_RECENTLY_VIEWED';
 export const SET_RECENTLY_VIEWED = 'SET_RECENTLY_VIEWED';
@@ -14,17 +15,23 @@ const getSessionId = () => {
   return id;
 };
 
-const sessionHeaders = () => ({ 'X-Session-Id': getSessionId() });
+const getHeaders = () => {
+  const token = getLocalData('token');
+  return {
+    'X-Session-Id': getSessionId(),
+    ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+  };
+};
 
 export const recordView = (productId) => () => {
-  axios.post(`${BASE_URL}products/${productId}/view`, null, { headers: sessionHeaders() })
+  axios.post(`${BASE_URL}products/${productId}/view`, null, { headers: getHeaders() })
     .catch(() => {}); // fire & forget
 };
 
 export const fetchRecentlyViewed = () => async (dispatch) => {
   dispatch({ type: FETCH_RECENTLY_VIEWED });
   try {
-    const response = await axios.get(`${BASE_URL}customer/recently-viewed`, { headers: sessionHeaders() });
+    const response = await axios.get(`${BASE_URL}customer/recently-viewed`, { headers: getHeaders() });
     dispatch({ type: SET_RECENTLY_VIEWED, payload: response.data });
   } catch (e) {
     dispatch({ type: SET_RECENTLY_VIEWED, payload: [] });
