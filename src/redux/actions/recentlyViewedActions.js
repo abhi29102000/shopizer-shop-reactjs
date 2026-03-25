@@ -12,19 +12,22 @@ const getSessionId = () => {
   return id;
 };
 
-// The webService.js interceptor already adds Authorization + baseURL.
-// We only need to add X-Session-Id for guest tracking.
 export const recordView = (productId) => () => {
-  axios.post(`products/${productId}/view`, null, { headers: { 'X-Session-Id': getSessionId() } })
-    .catch(() => {});
+  axios.post(`products/${productId}/view`, null, {
+    headers: { 'X-Session-Id': getSessionId() }
+  }).catch(() => {});
 };
 
 export const fetchRecentlyViewed = () => async (dispatch) => {
   dispatch({ type: FETCH_RECENTLY_VIEWED });
   try {
+    const token = localStorage.getItem('token');
+    const headers = { 'X-Session-Id': getSessionId() };
+    if (token) headers['Authorization'] = 'Bearer ' + token;
+
     const response = await axios.get('customer/recently-viewed', {
       params: { store: 'DEFAULT', lang: 'en' },
-      headers: { 'X-Session-Id': getSessionId() }
+      headers
     });
     dispatch({ type: SET_RECENTLY_VIEWED, payload: response.data });
   } catch (e) {
