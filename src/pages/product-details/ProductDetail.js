@@ -15,22 +15,24 @@ import { multilanguage } from "redux-multilanguage";
 import { useDispatch } from "react-redux";
 import { recordView } from "../../redux/actions/recentlyViewedActions";
 import RecentlyViewed from "../../components/product/RecentlyViewed";
-const ProductDetails = ({ strings, location, productID, currentLanguageCode, setLoader, defaultStore }) => {
+const ProductDetails = ({ strings, location, match, productID, currentLanguageCode, setLoader, defaultStore }) => {
   const dispatch = useDispatch();
   const { pathname } = location;
+  // use URL param id if Redux productid not set (e.g. direct navigation)
+  const resolvedProductID = productID || match?.params?.id;
   const [productDetails, setProductDetails] = useState();
   const [productReview, setProductReview] = useState([]);
 
   useEffect(() => {
     getProductDetails();
     getReview();
-    if (productID) dispatch(recordView(productID));
+    if (resolvedProductID) dispatch(recordView(resolvedProductID));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resolvedProductID]);
 
   const getProductDetails = async () => {
     setLoader(true)
-    let action = constant.ACTION.PRODUCTS + productID + '?lang=' + currentLanguageCode + '&store=' + defaultStore;
+    let action = constant.ACTION.PRODUCTS + resolvedProductID + '?lang=' + currentLanguageCode + '&store=' + defaultStore;
     try {
       let response = await WebService.get(action);
       if (response) {
@@ -43,7 +45,7 @@ const ProductDetails = ({ strings, location, productID, currentLanguageCode, set
     }
   }
   const getReview = async () => {
-    let action = constant.ACTION.PRODUCTS + productID + '/reviews?store=' + defaultStore;
+    let action = constant.ACTION.PRODUCTS + resolvedProductID + '/reviews?store=' + defaultStore;
     try {
       let response = await WebService.get(action);
       if (response) {
