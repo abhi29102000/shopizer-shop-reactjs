@@ -5,7 +5,9 @@ import { fetchRecentlyViewed } from '../../redux/actions/recentlyViewedActions';
 
 const RecentlyViewed = () => {
   const dispatch = useDispatch();
-  const { items, loading } = useSelector(state => state.recentlyViewed);
+  const recentlyViewed = useSelector(state => state.recentlyViewed);
+  const items = recentlyViewed ? recentlyViewed.items : [];
+  const loading = recentlyViewed ? recentlyViewed.loading : false;
 
   useEffect(() => {
     dispatch(fetchRecentlyViewed());
