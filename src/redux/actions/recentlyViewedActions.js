@@ -33,8 +33,10 @@ export const fetchRecentlyViewed = () => async (dispatch) => {
   dispatch({ type: FETCH_RECENTLY_VIEWED });
   try {
     const response = await axios.get(`${BASE_URL}customer/recently-viewed`, { headers: getHeaders() });
+    console.log('[RecentlyViewed] API response:', response.status, response.data);
     dispatch({ type: SET_RECENTLY_VIEWED, payload: response.data });
   } catch (e) {
+    console.error('[RecentlyViewed] API error:', e.response?.status, e.message);
     dispatch({ type: SET_RECENTLY_VIEWED, payload: [] });
   }
 };
